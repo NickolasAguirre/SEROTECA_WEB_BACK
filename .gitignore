@@ -1,0 +1,13 @@
+﻿# Ignorar archivos de configuración
+appsettings*.json
+
+# Ignorar carpetas bin y obj
+bin/
+obj/
+
+# Ignorar la carpeta .vs (Visual Studio)
+.vs/
+
+*.csproj.user
+*.csproj
+*.sh
