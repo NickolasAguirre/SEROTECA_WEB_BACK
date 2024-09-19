@@ -12,8 +12,8 @@ using SEROTECA_WEB_BACK.Models;
 namespace SEROTECA_WEB_BACK.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240918040150_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240919025653_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,12 +27,9 @@ namespace SEROTECA_WEB_BACK.Migrations
 
             modelBuilder.Entity("SEROTECA_WEB_BACK.Models.PortaMuestra", b =>
                 {
-                    b.Property<int?>("IdPortaMuestra")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("IdPortaMuestra")
                         .HasMaxLength(255)
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("IdPortaMuestra"));
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("Columnas")
                         .HasMaxLength(255)

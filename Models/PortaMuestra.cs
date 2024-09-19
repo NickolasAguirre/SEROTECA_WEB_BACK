@@ -7,7 +7,7 @@ namespace SEROTECA_WEB_BACK.Models
         [Required]
         [Key]
         [MaxLength(255)]
-        public int? IdPortaMuestra { get; set; }
+        public string? IdPortaMuestra { get; set; }
 
         [MaxLength(255)]
         public string? Description { get; set; }
