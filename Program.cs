@@ -15,6 +15,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 // Configurar el contexto de base de datos con la cadena de conexión
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
 builder.Services.AddScoped<IPortaMuestraService, PortaMuestraService>();
+builder.Services.AddScoped<IOrdenPortaMuestraService, OrdenPortaMuestraService>();
 
 
 builder.Services.AddControllers();
@@ -27,8 +28,10 @@ builder.Services.AddCors(x =>
     {
         policy.AllowAnyHeader();
         policy.AllowAnyOrigin();
-        policy.AllowAnyMethod();
+        policy.AllowAnyMethod().SetIsOriginAllowed(origin=>true);
         policy.WithOrigins("http://localhost:4200");
+
+        policy.WithOrigins();
     });
 });
 

@@ -22,6 +22,34 @@ namespace SEROTECA_WEB_BACK.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("SEROTECA_WEB_BACK.Models.OrdenPortaMuestra", b =>
+                {
+                    b.Property<string>("OrdenPortaMuestraId")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("IdPortaMuestra")
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int?>("Numero")
+                        .HasMaxLength(10)
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PosicionColumna")
+                        .HasMaxLength(2)
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PosicionFila")
+                        .HasMaxLength(2)
+                        .HasColumnType("int");
+
+                    b.HasKey("OrdenPortaMuestraId");
+
+                    b.HasIndex("IdPortaMuestra");
+
+                    b.ToTable("OrdenPortaMuestra");
+                });
+
             modelBuilder.Entity("SEROTECA_WEB_BACK.Models.PortaMuestra", b =>
                 {
                     b.Property<string>("IdPortaMuestra")
@@ -51,6 +79,15 @@ namespace SEROTECA_WEB_BACK.Migrations
                     b.HasKey("IdPortaMuestra");
 
                     b.ToTable("PortaMuestra");
+                });
+
+            modelBuilder.Entity("SEROTECA_WEB_BACK.Models.OrdenPortaMuestra", b =>
+                {
+                    b.HasOne("SEROTECA_WEB_BACK.Models.PortaMuestra", "PortaMuestra")
+                        .WithMany()
+                        .HasForeignKey("IdPortaMuestra");
+
+                    b.Navigation("PortaMuestra");
                 });
 #pragma warning restore 612, 618
         }
