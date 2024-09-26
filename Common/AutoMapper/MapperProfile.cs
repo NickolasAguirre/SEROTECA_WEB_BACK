@@ -9,6 +9,7 @@ namespace SEROTECA_WEB_BACK.Common.AutoMapper
         public MapperProfile() {
             CreateMap<PortaMuestraCommandDA, PortaMuestra>();
             CreateMap<OrdenPortaMuestraDA, OrdenPortaMuestra>();
+            CreateMap<OrdenPortaMuestra,OrdenPortaMuestraDA>();
         }
         
 

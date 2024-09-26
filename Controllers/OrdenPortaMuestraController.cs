@@ -7,13 +7,20 @@ namespace SEROTECA_WEB_BACK.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrdenPortaMuestra : ControllerBase
+    public class OrdenPortaMuestraController : ControllerBase
     {
 
         private readonly IOrdenPortaMuestraService _ordenPortaMuestraService;
-        public OrdenPortaMuestra(IOrdenPortaMuestraService ordenPortaMuestraService)
+        public OrdenPortaMuestraController(IOrdenPortaMuestraService ordenPortaMuestraService)
         {
             _ordenPortaMuestraService = ordenPortaMuestraService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAll()
+        {
+            var response = await _ordenPortaMuestraService.GetAll();
+            return Ok(response);
         }
 
         [HttpPost]
@@ -22,6 +29,8 @@ namespace SEROTECA_WEB_BACK.Controllers
             var response = await _ordenPortaMuestraService.Post(command);
             return Ok(response);
         }
+
+
 
 
     }

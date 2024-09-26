@@ -8,6 +8,7 @@ namespace SEROTECA_WEB_BACK.Services
 
     public interface IOrdenPortaMuestraService
     {
+        public Task<List<OrdenPortaMuestraDA>> GetAll();
         public Task<OrdenPortaMuestra> Post(OrdenPortaMuestraDA command);
 
     }
@@ -21,47 +22,39 @@ namespace SEROTECA_WEB_BACK.Services
             _context = context;
         }
 
+        public async Task<List<OrdenPortaMuestraDA>> GetAll()
+        {
+            try
+            {
+               var response = await  _context.OrdenPortaMuestra.ToListAsync();
+               var ordenPortaMuestraDA = _mapper.Map<List<OrdenPortaMuestraDA>>(response);
+               return ordenPortaMuestraDA;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public async Task<OrdenPortaMuestra> Post(OrdenPortaMuestraDA command)
         {
-            
+
             try
             {
                 PortaMuestra portaMuestraLimits = await _context.PortaMuestra.FirstOrDefaultAsync(x => x.IdPortaMuestra == command.IdPortaMuestra);
 
                 OrdenPortaMuestra ordenPortaMuestra = _mapper.Map<OrdenPortaMuestra>(command);
 
-                var columnasFilas = await (from opm in _context.OrdenPortaMuestra
-                                           join pm in _context.PortaMuestra on opm.IdPortaMuestra equals pm.IdPortaMuestra
-                                           where pm.IdPortaMuestra == command.IdPortaMuestra
-                                           select new OrdenPortaMuestraPosicionesDA
-                                           {
-                                               Columna = opm.PosicionColumna ,
-                                               Fila = opm.PosicionFila 
-                                           }).ToListAsync();
+                int TotalReg = await _context.OrdenPortaMuestra
+                                      .Where(opm => opm.IdPortaMuestra == command.IdPortaMuestra)
+                                      .CountAsync();
 
-                var ultimaPosicion = columnasFilas.OrderByDescending(cf => cf.Fila)
-                                                   .ThenByDescending(cf => cf.Columna)
-                                                   .FirstOrDefault();
+                int ColumSig = (TotalReg % portaMuestraLimits.Columnas) + 1;
+                int? FilaSig  = (TotalReg / portaMuestraLimits.Filas) + 1;
 
-                int maxColumna = (int)(ultimaPosicion.Columna ?? 0);
-                int maxFila = (int)(ultimaPosicion.Fila ?? 0);
-
-                if (columnasFilas == null)
-                {
-                    maxColumna = 1;
-                    maxFila = 1;
-                }
-                else
-                {
-                    if (maxColumna > portaMuestraLimits.Columnas)
-                    {
-                        maxColumna = 1;
-                        maxFila += 1;
-                    }
-                    ordenPortaMuestra.PosicionColumna = maxColumna+1;
-                    ordenPortaMuestra.PosicionFila = maxFila;
-                }
-
+                ordenPortaMuestra.PosicionColumna = ColumSig;
+                ordenPortaMuestra.PosicionFila = FilaSig;
                 ordenPortaMuestra.OrdenPortaMuestraId = Ulid.NewUlid().ToString();
                 _context.Add<OrdenPortaMuestra>(ordenPortaMuestra);
                 await _context.SaveChangesAsync();
