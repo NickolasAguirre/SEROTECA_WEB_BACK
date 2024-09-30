@@ -23,6 +23,13 @@ namespace SEROTECA_WEB_BACK.Controllers
             return Ok(response);
         }
 
+        [HttpGet("Find")]
+        public async Task<ActionResult> Find(int numero)
+        {
+            var response = await _ordenPortaMuestraService.Find(numero);
+            return Ok(response);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(OrdenPortaMuestraDA command)
         {

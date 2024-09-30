@@ -9,6 +9,7 @@ namespace SEROTECA_WEB_BACK.Services
     public interface IOrdenPortaMuestraService
     {
         public Task<List<OrdenPortaMuestraDA>> GetAll();
+        public Task<OrdenPortaMuestraPosicionesDA> Find(int numero);
         public Task<OrdenPortaMuestra> Post(OrdenPortaMuestraDA command);
 
     }
@@ -29,6 +30,21 @@ namespace SEROTECA_WEB_BACK.Services
                var response = await  _context.OrdenPortaMuestra.ToListAsync();
                var ordenPortaMuestraDA = _mapper.Map<List<OrdenPortaMuestraDA>>(response);
                return ordenPortaMuestraDA;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<OrdenPortaMuestraPosicionesDA> Find(int numero)
+        {
+            try
+            {
+                var response = await _context.OrdenPortaMuestra.FirstOrDefaultAsync(x=>x.Numero==numero);
+                var ordenPortaMuestraDA = _mapper.Map<OrdenPortaMuestraPosicionesDA>(response);
+                return ordenPortaMuestraDA;
 
             }
             catch (Exception ex)
